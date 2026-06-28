@@ -1,0 +1,9 @@
+store_id,store_name,city,region
+S01,RetailMart Andheri,Mumbai,West
+S02,RetailMart Connaught Place,Delhi,North
+S03,RetailMart Koramangala,Bengaluru,South
+S04,RetailMart T Nagar,Chennai,South
+S05,RetailMart Hitech City,Hyderabad,South
+S06,RetailMart Salt Lake,Kolkata,East
+S07,RetailMart Aundh,Pune,West
+S08,RetailMart Vastrapur,Ahmedabad,West

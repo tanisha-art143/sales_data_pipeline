@@ -1,0 +1,85 @@
+2026-06-28 11:57:35 [INFO    ] ========================================================
+2026-06-28 11:57:35 [INFO    ]   RETAILMART DATA PIPELINE — START
+2026-06-28 11:57:35 [INFO    ] ========================================================
+2026-06-28 11:57:35 [INFO    ] TASK 1 — Loading CSV files...
+2026-06-28 11:57:35 [ERROR   ] FILE NOT FOUND: [Errno 2] No such file or directory: 'c:\\Users\\HP\\Downloads\\files\\data\\sales_data.csv'
+2026-06-28 11:57:35 [ERROR   ] Check karein ki data/ folder mein teeno CSV files hain.
+2026-06-28 11:57:36 [INFO    ] ========================================================
+2026-06-28 11:57:36 [INFO    ]   RETAILMART DATA PIPELINE — START
+2026-06-28 11:57:36 [INFO    ] ========================================================
+2026-06-28 11:57:36 [INFO    ] TASK 1 — Loading CSV files...
+2026-06-28 11:57:36 [ERROR   ] FILE NOT FOUND: [Errno 2] No such file or directory: 'c:\\Users\\HP\\Downloads\\files\\data\\sales_data.csv'
+2026-06-28 11:57:36 [ERROR   ] Check karein ki data/ folder mein teeno CSV files hain.
+2026-06-28 11:58:18 [INFO    ] ========================================================
+2026-06-28 11:58:18 [INFO    ]   RETAILMART DATA PIPELINE — START
+2026-06-28 11:58:18 [INFO    ] ========================================================
+2026-06-28 11:58:18 [INFO    ] TASK 1 — Loading CSV files...
+2026-06-28 11:58:18 [INFO    ] Loaded → sales:(43, 6), products:(10, 4), stores:(8, 4)
+2026-06-28 11:58:18 [WARNING ] [VALIDATION] 1 negative quantity row(s) found and fixed
+2026-06-28 11:58:18 [WARNING ] [VALIDATION] 1 outlier amount row(s) found: [750000.0]
+2026-06-28 11:58:18 [DEBUG   ] [VALIDATION] sales: 43 rows in, 43 rows out, 2 warning(s)
+2026-06-28 11:58:18 [DEBUG   ] [VALIDATION] products: 10 rows in, 10 rows out, 0 warning(s)
+2026-06-28 11:58:18 [INFO    ] TASK 2 — Cleaning sales data...
+2026-06-28 11:58:18 [INFO    ] Duplicates removed: 3
+2026-06-28 11:58:18 [INFO    ] Rows dropped (null amount): 3
+2026-06-28 11:58:18 [INFO    ] Data types corrected: sale_date→datetime, amount→float, quantity→int
+2026-06-28 11:58:18 [INFO    ] TASK 3 — Transforming data...
+2026-06-28 11:58:18 [INFO    ] Transformation complete
+2026-06-28 11:58:18 [INFO    ] TASK 4 — Loading to SQLite database...
+2026-06-28 11:58:18 [INFO    ] Table 'retail_sales' written — 37 rows
+2026-06-28 11:58:18 [INFO    ] Database saved at: c:\Users\HP\Downloads\files\retail_sales.db
+2026-06-28 11:58:18 [INFO    ] TASK 5 — Generating business report...
+2026-06-28 11:58:18 [INFO    ] KPIs — Revenue: Rs 3,580,477.0 | Top city: Kolkata | Top product: Sony Headphones WH1000
+2026-06-28 11:58:18 [INFO    ] Generating matplotlib charts...
+2026-06-28 11:58:18 [INFO    ] Charts saved: c:\Users\HP\Downloads\files\reports\revenue_dashboard.png
+2026-06-28 11:58:18 [INFO    ] Generating HTML dashboard...
+2026-06-28 11:58:18 [INFO    ] HTML Dashboard saved: c:\Users\HP\Downloads\files\reports\dashboard.html
+2026-06-28 11:58:18 [INFO    ] PIPELINE COMPLETED SUCCESSFULLY
+2026-06-28 12:42:18 [INFO    ] ========================================================
+2026-06-28 12:42:18 [INFO    ]   RETAILMART DATA PIPELINE — START
+2026-06-28 12:42:18 [INFO    ] ========================================================
+2026-06-28 12:42:18 [INFO    ] TASK 1 — Loading CSV files...
+2026-06-28 12:42:18 [INFO    ] Loaded → sales:(43, 6), products:(10, 4), stores:(8, 4)
+2026-06-28 12:42:18 [WARNING ] [VALIDATION] 1 negative quantity row(s) found and fixed
+2026-06-28 12:42:18 [WARNING ] [VALIDATION] 1 outlier amount row(s) found: [750000.0]
+2026-06-28 12:42:18 [DEBUG   ] [VALIDATION] sales: 43 rows in, 43 rows out, 2 warning(s)
+2026-06-28 12:42:18 [DEBUG   ] [VALIDATION] products: 10 rows in, 10 rows out, 0 warning(s)
+2026-06-28 12:42:18 [INFO    ] TASK 2 — Cleaning sales data...
+2026-06-28 12:42:18 [INFO    ] Duplicates removed: 3
+2026-06-28 12:42:18 [INFO    ] Rows dropped (null amount): 3
+2026-06-28 12:42:18 [INFO    ] Data types corrected: sale_date→datetime, amount→float, quantity→int
+2026-06-28 12:42:18 [INFO    ] TASK 3 — Transforming data...
+2026-06-28 12:42:18 [INFO    ] Transformation complete
+2026-06-28 12:42:18 [INFO    ] Table 'retail_sales' written — 37 rows
+2026-06-28 12:42:18 [INFO    ] Database saved at: c:\Users\HP\Downloads\files\retail_sales.db
+2026-06-28 12:42:18 [INFO    ] TASK 5 — Generating business report...
+2026-06-28 12:42:18 [INFO    ] KPIs — Revenue: Rs 3,580,477.0 | Top city: Kolkata | Top product: Sony Headphones WH1000
+2026-06-28 12:42:18 [INFO    ] Generating matplotlib charts...
+2026-06-28 12:42:19 [INFO    ] Charts saved: c:\Users\HP\Downloads\files\reports\revenue_dashboard.png
+2026-06-28 12:42:19 [INFO    ] Generating HTML dashboard...
+2026-06-28 12:42:19 [INFO    ] HTML Dashboard saved: c:\Users\HP\Downloads\files\reports\dashboard.html
+2026-06-28 12:42:19 [INFO    ] PIPELINE COMPLETED SUCCESSFULLY
+2026-06-28 12:48:39 [INFO    ] ========================================================
+2026-06-28 12:48:39 [INFO    ]   RETAILMART DATA PIPELINE — START
+2026-06-28 12:48:39 [INFO    ] ========================================================
+2026-06-28 12:48:39 [INFO    ] TASK 1 — Loading CSV files...
+2026-06-28 12:48:39 [INFO    ] Loaded → sales:(43, 6), products:(10, 4), stores:(8, 4)
+2026-06-28 12:48:39 [WARNING ] [VALIDATION] 1 negative quantity row(s) found and fixed
+2026-06-28 12:48:39 [WARNING ] [VALIDATION] 1 outlier amount row(s) found: [750000.0]
+2026-06-28 12:48:39 [DEBUG   ] [VALIDATION] sales: 43 rows in, 43 rows out, 2 warning(s)
+2026-06-28 12:48:39 [DEBUG   ] [VALIDATION] products: 10 rows in, 10 rows out, 0 warning(s)
+2026-06-28 12:48:39 [INFO    ] TASK 2 — Cleaning sales data...
+2026-06-28 12:48:39 [INFO    ] Duplicates removed: 3
+2026-06-28 12:48:39 [INFO    ] Rows dropped (null amount): 3
+2026-06-28 12:48:39 [INFO    ] Data types corrected: sale_date→datetime, amount→float, quantity→int
+2026-06-28 12:48:39 [INFO    ] TASK 3 — Transforming data...
+2026-06-28 12:48:39 [INFO    ] Transformation complete
+2026-06-28 12:48:39 [INFO    ] Table 'retail_sales' written — 37 rows
+2026-06-28 12:48:39 [INFO    ] Database saved at: c:\Users\HP\Downloads\files\retail_sales.db
+2026-06-28 12:48:39 [INFO    ] TASK 5 — Generating business report...
+2026-06-28 12:48:39 [INFO    ] KPIs — Revenue: Rs 3,580,477.0 | Top city: Kolkata | Top product: Sony Headphones WH1000
+2026-06-28 12:48:39 [INFO    ] Generating matplotlib charts...
+2026-06-28 12:48:40 [INFO    ] Charts saved: c:\Users\HP\Downloads\files\reports\revenue_dashboard.png
+2026-06-28 12:48:40 [INFO    ] Generating HTML dashboard...
+2026-06-28 12:48:40 [INFO    ] HTML Dashboard saved: c:\Users\HP\Downloads\files\reports\dashboard.html
+2026-06-28 12:48:40 [INFO    ] PIPELINE COMPLETED SUCCESSFULLY

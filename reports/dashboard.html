@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RetailMart Sales Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+          background: #f0f2f5; color: #2d3436; min-height: 100vh; }
+  header { background: linear-gradient(135deg, #1a73e8, #0d47a1);
+            color: white; padding: 20px 32px;
+            display: flex; align-items: center; gap: 16px; }
+  header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+  header p  { font-size: 13px; opacity: 0.8; margin-top: 2px; }
+  .badge    { background: rgba(255,255,255,0.2); border-radius: 20px;
+               padding: 4px 12px; font-size: 12px; font-weight: 600; }
+  .main  { padding: 24px 32px; max-width: 1400px; margin: 0 auto; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+               margin-bottom: 24px; }
+  .kpi-card { background: white; border-radius: 12px;
+               padding: 20px; border: 1px solid #e9ecef;
+               box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .kpi-card .label { font-size: 12px; color: #868e96;
+                      text-transform: uppercase; letter-spacing: 0.5px;
+                      margin-bottom: 6px; }
+  .kpi-card .value { font-size: 24px; font-weight: 700; color: #1a73e8; }
+  .kpi-card .sub   { font-size: 12px; color: #868e96; margin-top: 4px; }
+  .chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+                 margin-bottom: 24px; }
+  .chart-card { background: white; border-radius: 12px; padding: 20px;
+                 border: 1px solid #e9ecef;
+                 box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .chart-card h3 { font-size: 14px; font-weight: 600; color: #495057;
+                    margin-bottom: 16px; padding-bottom: 12px;
+                    border-bottom: 1px solid #f1f3f5; }
+  .chart-wrap { position: relative; height: 240px; }
+  .table-card { background: white; border-radius: 12px; padding: 20px;
+                 border: 1px solid #e9ecef;
+                 box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+                 margin-bottom: 24px; }
+  .table-card h3 { font-size: 14px; font-weight: 600; color: #495057;
+                    margin-bottom: 16px; padding-bottom: 12px;
+                    border-bottom: 1px solid #f1f3f5; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #f8f9fa; padding: 10px 12px; text-align: left;
+        font-weight: 600; color: #495057; border-bottom: 2px solid #dee2e6; }
+  td { padding: 9px 12px; border-bottom: 1px solid #f1f3f5; color: #495057; }
+  tr:hover td { background: #f8f9fa; }
+  footer { text-align: center; padding: 20px; color: #adb5bd; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>RetailMart Sales Dashboard</h1>
+    <p>Data Engineering Pipeline — Auto-generated report</p>
+  </div>
+  <div style="margin-left:auto">
+    <span class="badge">Live from SQLite DB</span>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="label">Total Transactions</div>
+      <div class="value">37</div>
+      <div class="sub">across all stores</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Total Revenue</div>
+      <div class="value">Rs 3,580,477</div>
+      <div class="sub">net sales value</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Top Selling City</div>
+      <div class="value" style="font-size:20px">Kolkata</div>
+      <div class="sub">highest revenue city</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Top Product</div>
+      <div class="value" style="font-size:14px;padding-top:6px">Sony Headphones WH1000</div>
+      <div class="sub">by units sold</div>
+    </div>
+  </div>
+
+  <!-- Charts row 1 -->
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Revenue by City</h3>
+      <div class="chart-wrap"><canvas id="cityChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Top Products by Quantity Sold</h3>
+      <div class="chart-wrap"><canvas id="prodChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Charts row 2 -->
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Daily Revenue Trend</h3>
+      <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <h3>Revenue by Region</h3>
+      <div class="chart-wrap"><canvas id="regionChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Store daily table -->
+  <div class="table-card">
+    <h3>Revenue per Store per Day</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Store</th><th>City</th><th>Date</th>
+          <th style="text-align:center">Transactions</th>
+          <th style="text-align:right">Revenue</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <td>RetailMart Salt Lake</td>
+          <td>Kolkata</td>
+          <td>2026-01-05</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:right">Rs 1,349,000</td>
+        </tr>
+        <tr>
+          <td>RetailMart T Nagar</td>
+          <td>Chennai</td>
+          <td>2026-01-07</td>
+          <td style="text-align:center">3</td>
+          <td style="text-align:right">Rs 437,110</td>
+        </tr>
+        <tr>
+          <td>RetailMart Salt Lake</td>
+          <td>Kolkata</td>
+          <td>2026-01-01</td>
+          <td style="text-align:center">3</td>
+          <td style="text-align:right">Rs 329,890</td>
+        </tr>
+        <tr>
+          <td>RetailMart Hitech City</td>
+          <td>Hyderabad</td>
+          <td>2026-01-01</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:right">Rs 299,900</td>
+        </tr>
+        <tr>
+          <td>RetailMart Koramangala</td>
+          <td>Bengaluru</td>
+          <td>2026-01-03</td>
+          <td style="text-align:center">2</td>
+          <td style="text-align:right">Rs 212,126</td>
+        </tr>
+        <tr>
+          <td>RetailMart Connaught Place</td>
+          <td>Delhi</td>
+          <td>2026-01-02</td>
+          <td style="text-align:center">2</td>
+          <td style="text-align:right">Rs 191,948</td>
+        </tr>
+        <tr>
+          <td>RetailMart Koramangala</td>
+          <td>Bengaluru</td>
+          <td>2026-01-04</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:right">Rs 149,950</td>
+        </tr>
+        <tr>
+          <td>RetailMart T Nagar</td>
+          <td>Chennai</td>
+          <td>2026-01-06</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:right">Rs 89,970</td>
+        </tr>
+        <tr>
+          <td>RetailMart Andheri</td>
+          <td>Mumbai</td>
+          <td>2026-01-04</td>
+          <td style="text-align:center">3</td>
+          <td style="text-align:right">Rs 76,368</td>
+        </tr>
+        <tr>
+          <td>RetailMart Andheri</td>
+          <td>Mumbai</td>
+          <td>2026-01-01</td>
+          <td style="text-align:center">2</td>
+          <td style="text-align:right">Rs 61,992</td>
+        </tr>
+        <tr>
+          <td>RetailMart Aundh</td>
+          <td>Pune</td>
+          <td>2026-01-04</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:right">Rs 59,990</td>
+        </tr>
+        <tr>
+          <td>RetailMart Aundh</td>
+          <td>Pune</td>
+          <td>2026-01-07</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:right">Rs 59,787</td>
+        </tr>
+        <tr>
+          <td>RetailMart Koramangala</td>
+          <td>Bengaluru</td>
+          <td>2026-01-07</td>
+          <td style="text-align:center">2</td>
+          <td style="text-align:right">Rs 59,787</td>
+        </tr>
+        <tr>
+          <td>RetailMart Connaught Place</td>
+          <td>Delhi</td>
+          <td>2026-01-07</td>
+          <td style="text-align:center">2</td>
+          <td style="text-align:right">Rs 58,618</td>
+        </tr>
+        <tr>
+          <td>RetailMart T Nagar</td>
+          <td>Chennai</td>
+          <td>2026-01-04</td>
+          <td style="text-align:center">2</td>
+          <td style="text-align:right">Rs 44,198</td>
+        </tr>
+        <tr>
+          <td>RetailMart Hitech City</td>
+          <td>Hyderabad</td>
+          <td>2026-01-04</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:right">Rs 41,988</td>
+        </tr>
+        <tr>
+          <td>RetailMart Koramangala</td>
+          <td>Bengaluru</td>
+          <td>2026-01-01</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:right">Rs 27,992</td>
+        </tr>
+        <tr>
+          <td>RetailMart Hitech City</td>
+          <td>Hyderabad</td>
+          <td>2026-01-02</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:right">Rs 16,093</td>
+        </tr>
+        <tr>
+          <td>RetailMart Salt Lake</td>
+          <td>Kolkata</td>
+          <td>2026-01-04</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:right">Rs 6,998</td>
+        </tr>
+        <tr>
+          <td>RetailMart Salt Lake</td>
+          <td>Kolkata</td>
+          <td>2026-01-07</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:right">Rs 4,668</td>
+        </tr>
+        <tr>
+          <td>RetailMart Vastrapur</td>
+          <td>Ahmedabad</td>
+          <td>2026-01-06</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:right">Rs 1,715</td>
+        </tr>
+        <tr>
+          <td>RetailMart Vastrapur</td>
+          <td>Ahmedabad</td>
+          <td>2026-01-03</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:right">Rs 389</td>
+        </tr>
+        <tr>
+          <td>RetailMart Andheri</td>
+          <td>Mumbai</td>
+          <td>2026-01-03</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:right">Rs 0</td>
+        </tr>
+        <tr>
+          <td>RetailMart Koramangala</td>
+          <td>Bengaluru</td>
+          <td>2026-01-02</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:right">Rs 0</td>
+        </tr>
+        <tr>
+          <td>RetailMart Salt Lake</td>
+          <td>Kolkata</td>
+          <td>2026-01-06</td>
+          <td style="text-align:center">1</td>
+          <td style="text-align:right">Rs 0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<footer>Generated by Tanisha  &nbsp;|&nbsp; Data source: retail_sales.db</footer>
+
+<script>
+const COLORS = ['#4A90D9','#50C878','#FF6B6B','#FFD93D','#A29BFE','#FD79A8','#00CEC9','#FDCB6E'];
+const OPTS   = { responsive:true, maintainAspectRatio:false,
+                  plugins:{ legend:{ display:false } },
+                  scales:{ x:{ grid:{ display:false } }, y:{ grid:{ color:'#f1f3f5' } } } };
+
+new Chart(document.getElementById('cityChart'), {
+  type:'bar',
+  data:{ labels:['Kolkata', 'Chennai', 'Bengaluru', 'Hyderabad', 'Delhi', 'Mumbai', 'Pune', 'Ahmedabad'], datasets:[{ data:[1690556.0, 571278.0, 449855.0, 357981.0, 250566.0, 138360.0, 119777.0, 2104.0],
+    backgroundColor:COLORS, borderRadius:6, borderSkipped:false }] },
+  options:{ ...OPTS, plugins:{ legend:{ display:false },
+    tooltip:{ callbacks:{ label: c=>'Rs '+c.raw.toLocaleString('en-IN') } } } }
+});
+
+new Chart(document.getElementById('prodChart'), {
+  type:'bar',
+  data:{ labels:['Sony Headphones WH1000', 'Nike Running Shoes', 'Woodland Boots', 'Amul Butter 500g', 'Prestige Pressure Cooker', 'Basmati Rice 5kg', "Levi's Jeans"], datasets:[{ data:[53, 51, 41, 41, 28, 23, 22],
+    backgroundColor:'#50C878', borderRadius:6, borderSkipped:false }] },
+  options:{ ...OPTS, indexAxis:'y',
+    plugins:{ legend:{ display:false } } }
+});
+
+new Chart(document.getElementById('trendChart'), {
+  type:'line',
+  data:{ labels:['2026-01-01', '2026-01-02', '2026-01-03', '2026-01-04', '2026-01-05', '2026-01-06', '2026-01-07'], datasets:[{ data:[719774.0, 208041.0, 212515.0, 379492.0, 1349000.0, 91685.0, 619970.0],
+    borderColor:'#4A90D9', backgroundColor:'rgba(74,144,217,0.08)',
+    borderWidth:2.5, pointRadius:5, pointBackgroundColor:'white',
+    pointBorderWidth:2, fill:true, tension:0.3 }] },
+  options:{ ...OPTS, plugins:{ legend:{ display:false },
+    tooltip:{ callbacks:{ label: c=>'Rs '+c.raw.toLocaleString('en-IN') } } } }
+});
+
+new Chart(document.getElementById('regionChart'), {
+  type:'doughnut',
+  data:{ labels:['East', 'South', 'West', 'North'], datasets:[{ data:[1690556.0, 1379114.0, 260241.0, 250566.0],
+    backgroundColor:COLORS, borderWidth:2, borderColor:'white' }] },
+  options:{ responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{ position:'bottom', labels:{ boxWidth:12, font:{ size:12 } } },
+      tooltip:{ callbacks:{ label: c=>c.label+': Rs '+c.raw.toLocaleString('en-IN') } } } }
+});
+</script>
+</body>
+</html>
